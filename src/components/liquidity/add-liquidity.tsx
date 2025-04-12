@@ -16,6 +16,7 @@ import {
   FindReferenceError,
   TransactionRequestURLFields,
 } from "@solana/pay";
+import BigNumber from 'bignumber.js';
 
 type TokenData = {
   tokenMint: string;
