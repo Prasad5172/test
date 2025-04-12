@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     if (!referenceParam) {
       throw new Error('Missing reference in the URL query parameters.');
     }
-    const reference = new PublicKey(referenceParam);
+    const reference_is = new PublicKey(referenceParam);
     // const reference = new Keypair().publicKey;
     // console.log(reference.toBase58());
 
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       keys: [
         { pubkey: new PublicKey("4TeGWrrqMHW43r2QVYctp993pD6tAb4ZW4dxHJDNqmBR"), isSigner: false, isWritable: true },
         { pubkey: sender, isSigner: true, isWritable: true }, 
-        { pubkey: reference, isSigner: false, isWritable: false },
+        { pubkey: reference_is, isSigner: false, isWritable: false },
       ],
       data: data, 
     });
