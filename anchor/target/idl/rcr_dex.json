@@ -1,0 +1,1056 @@
+{
+  "address": "DX4TnoHCQoCCLC5pg7K49CMb9maMA3TMfHXiPBD55G1w",
+  "metadata": {
+    "name": "rcr_dex",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "change_amm_admin",
+      "discriminator": [130, 88, 235, 133, 24, 247, 1, 208],
+      "accounts": [
+        {
+          "name": "amm",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [97, 109, 109]
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_admin"
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_amm",
+      "discriminator": [242, 91, 21, 170, 5, 68, 125, 64],
+      "accounts": [
+        {
+          "name": "amm",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [97, 109, 109]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "docs": ["check : Adding a admin to the AMM"]
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_pool",
+      "discriminator": [233, 146, 209, 142, 207, 104, 64, 188],
+      "accounts": [
+        {
+          "name": "amm",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [97, 109, 109]
+              }
+            ]
+          }
+        },
+        {
+          "name": "pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [112, 111, 111, 108]
+              },
+              {
+                "kind": "account",
+                "path": "amm"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint_liquidity",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [108, 105, 113, 117, 105, 100, 105, 116, 121]
+              },
+              {
+                "kind": "account",
+                "path": "pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint_a"
+        },
+        {
+          "name": "mint_b"
+        },
+        {
+          "name": "pool_account_a",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112, 111, 111, 108, 45, 97, 99, 99, 111, 117, 110, 116, 45, 97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              }
+            ]
+          }
+        },
+        {
+          "name": "pool_account_b",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112, 111, 111, 108, 45, 97, 99, 99, 111, 117, 110, 116, 45, 98
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "docs": ["check : Adding a admin to the AMM"],
+          "writable": true,
+          "relations": ["amm"]
+        },
+        {
+          "name": "payer",
+          "docs": ["The account paying for all rents"],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "docs": ["Solana ecosystem accounts"]
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "fees",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "deposit_liquidity",
+      "discriminator": [245, 99, 59, 25, 151, 71, 233, 249],
+      "accounts": [
+        {
+          "name": "amm",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [97, 109, 109]
+              }
+            ]
+          },
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [112, 111, 111, 108]
+              },
+              {
+                "kind": "account",
+                "path": "amm"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ]
+          }
+        },
+        {
+          "name": "depositor",
+          "docs": [
+            "The account getting liquidity tokens & adding liquidity amount"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint_liquidity",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "mint_a",
+          "relations": ["pool"]
+        },
+        {
+          "name": "mint_b",
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_a",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_b",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "depositor_account_liquidity",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "depositor"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_liquidity"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "depositor_account_a",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "depositor"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "depositor_account_b",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "depositor"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "docs": ["Solana ecosystem accounts"]
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount_a",
+          "type": "u64"
+        },
+        {
+          "name": "amount_b",
+          "type": "u64"
+        },
+        {
+          "name": "min_liquidity",
+          "type": "u64"
+        },
+        {
+          "name": "fees",
+          "type": "u64"
+        },
+        {
+          "name": "use_entire_amount",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "swap_exact_input",
+      "discriminator": [194, 203, 142, 150, 137, 110, 81, 94],
+      "accounts": [
+        {
+          "name": "amm",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [97, 109, 109]
+              }
+            ]
+          },
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [112, 111, 111, 108]
+              },
+              {
+                "kind": "account",
+                "path": "amm"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trader",
+          "docs": ["The account doing the swap"],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint_a",
+          "relations": ["pool"]
+        },
+        {
+          "name": "mint_b",
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_a",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_b",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "trader_account_a",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trader"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "trader_account_b",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trader"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "docs": ["Solana ecosystem accounts"]
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "swap_a",
+          "type": "bool"
+        },
+        {
+          "name": "input_amount",
+          "type": "u64"
+        },
+        {
+          "name": "min_output_amount",
+          "type": "u64"
+        },
+        {
+          "name": "delta_price_change",
+          "type": "u64"
+        },
+        {
+          "name": "fees",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "swap_exact_output",
+      "discriminator": [45, 99, 76, 242, 223, 112, 168, 162],
+      "accounts": [
+        {
+          "name": "amm",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [97, 109, 109]
+              }
+            ]
+          },
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [112, 111, 111, 108]
+              },
+              {
+                "kind": "account",
+                "path": "amm"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trader",
+          "docs": ["The account doing the swap"],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint_a",
+          "relations": ["pool"]
+        },
+        {
+          "name": "mint_b",
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_a",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_b",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "trader_account_a",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trader"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "trader_account_b",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trader"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "docs": ["Solana ecosystem accounts"]
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "swap_a",
+          "type": "bool"
+        },
+        {
+          "name": "output_amount",
+          "type": "u64"
+        },
+        {
+          "name": "max_input_amount",
+          "type": "u64"
+        },
+        {
+          "name": "delta_price_change",
+          "type": "u64"
+        },
+        {
+          "name": "fees",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "withdraw_liquidity",
+      "discriminator": [149, 158, 33, 185, 47, 243, 253, 31],
+      "accounts": [
+        {
+          "name": "amm",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [97, 109, 109]
+              }
+            ]
+          }
+        },
+        {
+          "name": "pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [112, 111, 111, 108]
+              },
+              {
+                "kind": "account",
+                "path": "amm"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ]
+          }
+        },
+        {
+          "name": "depositor",
+          "docs": ["The account paying for all rents"],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint_liquidity",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "mint_a",
+          "relations": ["pool"]
+        },
+        {
+          "name": "mint_b",
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_a",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "pool_account_b",
+          "writable": true,
+          "relations": ["pool"]
+        },
+        {
+          "name": "depositor_account_liquidity",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "depositor"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_liquidity"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "depositor_account_a",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "depositor"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "depositor_account_b",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "depositor"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "docs": ["Solana ecosystem accounts"]
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "liquidity_amount",
+          "type": "u64"
+        },
+        {
+          "name": "min_amount_a",
+          "type": "u64"
+        },
+        {
+          "name": "min_amount_b",
+          "type": "u64"
+        },
+        {
+          "name": "fees",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Amm",
+      "discriminator": [143, 245, 200, 17, 74, 214, 196, 135]
+    },
+    {
+      "name": "Pool",
+      "discriminator": [241, 154, 109, 4, 17, 177, 109, 188]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidAdmin",
+      "msg": "Invalid admin call"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidFee",
+      "msg": "Invalid fee value"
+    },
+    {
+      "code": 6002,
+      "name": "InTokensOrder",
+      "msg": "Change order of tokens"
+    },
+    {
+      "code": 6003,
+      "name": "InsufficientBalance",
+      "msg": "Insufficient token balance"
+    },
+    {
+      "code": 6004,
+      "name": "InBalanceOptimalAmounts",
+      "msg": "Adding liquidity with in balance ratio"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientLiquidity",
+      "msg": "Liquidity is not sufficient"
+    },
+    {
+      "code": 6006,
+      "name": "MinLiquidityError",
+      "msg": "Minimum liquidity is not met"
+    },
+    {
+      "code": 6007,
+      "name": "ZeroAmount",
+      "msg": "Invalid zero amount"
+    },
+    {
+      "code": 6008,
+      "name": "OutputTooSmall",
+      "msg": "Output amount is small"
+    },
+    {
+      "code": 6009,
+      "name": "OutputTooHigh",
+      "msg": "Output amount is high"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidPriceChange",
+      "msg": "Unexpected change of price"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidDeltaPrice",
+      "msg": "Invalid delta price percentage"
+    },
+    {
+      "code": 6012,
+      "name": "TransferFailed",
+      "msg": "Transfering SOL failed"
+    }
+  ],
+  "types": [
+    {
+      "name": "Amm",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool_count",
+            "type": "u16"
+          },
+          {
+            "name": "amm_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amm",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint_a",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint_b",
+            "type": "pubkey"
+          },
+          {
+            "name": "fees",
+            "type": "u64"
+          },
+          {
+            "name": "mint_liquidity",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool_account_a",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool_account_b",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool_bump",
+            "type": "u8"
+          },
+          {
+            "name": "pool_mint_liquidity_bump",
+            "type": "u8"
+          },
+          {
+            "name": "pool_account_a_bump",
+            "type": "u8"
+          },
+          {
+            "name": "pool_account_b_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "MINIMUM_LIQUIDITY",
+      "type": "u64",
+      "value": "100"
+    }
+  ]
+}

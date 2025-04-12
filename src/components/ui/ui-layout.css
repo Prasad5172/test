@@ -1,0 +1,137 @@
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Heading 1 */
+h1 {
+  font-size: 1rem; /* 32px */
+  font-weight: bold;
+}
+/* Heading 2 */
+h2 {
+  font-size: .6rem; /* 24px */
+  font-weight: 600;
+}
+/* Heading 3 */
+h3 {
+  font-size: .65rem; /* 20px */
+  font-weight: 500;
+}
+
+@media (min-width: 640px) {
+  h1 {
+      font-size: 1.25rem; /* 36px */
+  }
+  h2 {
+    font-size: .8rem; /* 28px */
+  }
+  h3 {
+    font-size: .75rem; /* 24px */
+  }
+}
+
+@media (min-width: 768px) {
+  h1 {
+      font-size: 1.5rem; /* 36px */
+  }
+  h2 {
+    font-size: 1rem; /* 28px */
+  }
+  h3 {
+    font-size: .85rem; /* 24px */
+  }
+}
+
+@media (min-width: 1024px) {
+  h1 {
+      font-size: 1.75rem; /* 48px */
+  }
+  h2 {
+    font-size: 1.25rem; /* 36px */
+  }
+  h3 {
+    font-size: 1rem; /* 32px */
+  }
+}
+
+@media (min-width: 1280px) {
+  h1 {
+      font-size: 3; /* 60px */
+  }
+  h2 {
+    font-size: 2rem; /* 40px */
+  }
+}
+
+/* Paragraph */
+span,p,a {
+  font-size: .75rem;
+  color: #918d8d; /* Gray text */
+}
+
+@media (min-width: 640px) {
+  span,p,a {
+      font-size: .8rem; /* 18px */
+  }
+}
+
+@media (min-width: 768px) {
+  span,p,a {
+      font-size: .95rem; /* 20px */
+  }
+}
+
+@media (min-width: 1024px) {
+  span,p,a {
+      font-size: 1.1rem; /* 24px */
+  }
+}
+
+/* Small text */
+small {
+  font-size: 0.875rem; /* 14px */
+  color: #6B6B6B; /* Lighter gray */
+}
+
+@media (min-width: 640px) {
+  small {
+      font-size: 1rem; /* 16px */
+  }
+}
+
+@media (min-width: 768px) {
+  small {
+      font-size: 1.125rem; /* 18px */
+  }
+}
+
+.anticon{
+  font-size: 1rem;
+}
+  
+
+.org-nav-component-links *{
+  @apply mx-1;
+}
+
+@media (width < 1024px) {
+  .nav-p-2{
+    @apply fixed m-10 top-0 mt-5 z-50 h-[calc(100vh)] flex-col justify-start w-full bg-black hidden;
+  }
+  .menu.menu-horizontal{
+    @apply flex-col;
+  }
+  .menu-buttons{
+    @apply flex-col max-w-[300px] w-[200px] items-center;
+  }
+  .wallet-adapter-button {
+    margin: 10px auto !important;
+  }
+  .menu.drop-down-content{
+    @apply left-1/2 transform translate-x-[-50%];
+  }
+}
