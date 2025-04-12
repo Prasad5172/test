@@ -87,14 +87,14 @@ export function AddLiquidity() {
       // params.append("minLiquidity", minLiquidity.toString());
       // params.append("fees", fees.toString());
 
-      const apiUrl = `${location.protocol}//${location.host}/api/hello`;
+      const apiUrl = `${location.protocol}//${location.host}/api/hello?${params.toString()}`;
       // Encode the API URL into a QR code
       const urlFields: TransactionRequestURLFields = {
         link: new URL(apiUrl),
       };
       console.log(apiUrl);
 
-      // const url = encodeURL(urlFields);
+      const url = encodeURL(urlFields);
       const recipient = new PublicKey(
         "414C5ffjEmZaVdrptaA5TfWWNsLWFVM6aqZfPvwsxsmr"
       );
@@ -103,14 +103,14 @@ export function AddLiquidity() {
       const message = "testing the code";
       const memo = "JC#4098";
 
-      const url = encodeURL({
-        recipient,
-        amount,
-        reference,
-        label,
-        message,
-        memo,
-      });
+      // const url = encodeURL({
+      //   recipient,
+      //   amount,
+      //   reference,
+      //   label,
+      //   message,
+      //   memo,
+      // });
       const qr = createQR(url, 360, "white", "black");
       console.log(url);
 
