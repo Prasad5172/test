@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     const connection = new Connection(ENDPOINT);
 
     const depositIx = new TransactionInstruction({
-      programId: new PublicKey("DX4TnoHCQoCCLC5pg7K49CMb9maMA3TMfHXiPBD55G1w"),
+      programId: PROGRAM_ID,
       keys: [
         { pubkey: amm, isSigner: false, isWritable: false },
         { pubkey: pool, isSigner: false, isWritable: false },
