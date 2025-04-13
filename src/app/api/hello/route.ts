@@ -69,52 +69,52 @@ export async function POST(request: NextRequest) {
 
     const reference = new PublicKey(referenceParam);
     const depositor = new PublicKey(account);
-    // const mintA = new PublicKey(mintAPubkey);
-    // const mintB = new PublicKey(mintBPubkey);
+    const mintA = new PublicKey(mintAPubkey);
+    const mintB = new PublicKey(mintBPubkey);
 
-    // const depositAmountABN = new BN(depositAmountA);
-    // const depositAmountBBN = new BN(depositAmountB);
-    // const minLiquidityBN = new BN(minLiquidity);
-    // const feesBN = new BN(fees);
+    const depositAmountABN = new BN(depositAmountA);
+    const depositAmountBBN = new BN(depositAmountB);
+    const minLiquidityBN = new BN(minLiquidity);
+    const feesBN = new BN(fees);
 
     // Derive PDAs
-    // const [amm] = PublicKey.findProgramAddressSync(
-    //   [Buffer.from("amm")],
-    //   PROGRAM_ID
-    // );
-    // const [pool] = PublicKey.findProgramAddressSync(
-    //   [Buffer.from("pool"), amm.toBuffer(), mintA.toBuffer(), mintB.toBuffer()],
-    //   PROGRAM_ID
-    // );
-    // const [mintLiquidity] = PublicKey.findProgramAddressSync(
-    //   [Buffer.from("liquidity"), pool.toBuffer()],
-    //   PROGRAM_ID
-    // );
-    // const [poolAccountA] = PublicKey.findProgramAddressSync(
-    //   [Buffer.from("pool-account-a"), pool.toBuffer(), mintA.toBuffer()],
-    //   PROGRAM_ID
-    // );
-    // const [poolAccountB] = PublicKey.findProgramAddressSync(
-    //   [Buffer.from("pool-account-b"), pool.toBuffer(), mintB.toBuffer()],
-    //   PROGRAM_ID
-    // );
+    const [amm] = PublicKey.findProgramAddressSync(
+      [Buffer.from("amm")],
+      PROGRAM_ID
+    );
+    const [pool] = PublicKey.findProgramAddressSync(
+      [Buffer.from("pool"), amm.toBuffer(), mintA.toBuffer(), mintB.toBuffer()],
+      PROGRAM_ID
+    );
+    const [mintLiquidity] = PublicKey.findProgramAddressSync(
+      [Buffer.from("liquidity"), pool.toBuffer()],
+      PROGRAM_ID
+    );
+    const [poolAccountA] = PublicKey.findProgramAddressSync(
+      [Buffer.from("pool-account-a"), pool.toBuffer(), mintA.toBuffer()],
+      PROGRAM_ID
+    );
+    const [poolAccountB] = PublicKey.findProgramAddressSync(
+      [Buffer.from("pool-account-b"), pool.toBuffer(), mintB.toBuffer()],
+      PROGRAM_ID
+    );
 
-    // // User associated token accounts
-    // const depositorAccountA = await getAssociatedTokenAddress(mintA, depositor);
-    // const depositorAccountB = await getAssociatedTokenAddress(mintB, depositor);
-    // const depositorAccountLiquidity = await getAssociatedTokenAddress(mintLiquidity, depositor);
+    // User associated token accounts
+    const depositorAccountA = await getAssociatedTokenAddress(mintA, depositor);
+    const depositorAccountB = await getAssociatedTokenAddress(mintB, depositor);
+    const depositorAccountLiquidity = await getAssociatedTokenAddress(mintLiquidity, depositor);
 
-    // const tokenProgram = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
-    // const associatedTokenProgram = new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
-    // const systemProgram = new PublicKey("11111111111111111111111111111111");
+    const tokenProgram = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+    const associatedTokenProgram = new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
+    const systemProgram = new PublicKey("11111111111111111111111111111111");
 
-    // const instructionData = getInstructionData(
-    //   depositAmountABN,
-    //   depositAmountBBN,
-    //   minLiquidityBN,
-    //   feesBN,
-    //   false // useEntireAmount (hardcoded to false)
-    // );
+    const instructionData = getInstructionData(
+      depositAmountABN,
+      depositAmountBBN,
+      minLiquidityBN,
+      feesBN,
+      false // useEntireAmount (hardcoded to false)
+    );
 
     // const depositIX = new TransactionInstruction({
     //   programId: PROGRAM_ID,
