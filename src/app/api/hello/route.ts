@@ -144,59 +144,59 @@ export async function POST(request: NextRequest) {
     console.log(account);
 
 
-    // const incrementIx = new TransactionInstruction({
-    //   programId: PROGRAM_ID, // Your program's ID
-    //   keys: [
-    //     { pubkey: new PublicKey("4TeGWrrqMHW43r2QVYctp993pD6tAb4ZW4dxHJDNqmBR"), isSigner: false, isWritable: true },
-    //     { pubkey: depositor, isSigner: true, isWritable: true }, 
-    //     { pubkey: reference, isSigner: false, isWritable: false },
-    //   ],
-    //   data: data, 
-    // });
+    const incrementIx = new TransactionInstruction({
+      programId: PROGRAM_ID, // Your program's ID
+      keys: [
+        { pubkey: new PublicKey("4TeGWrrqMHW43r2QVYctp993pD6tAb4ZW4dxHJDNqmBR"), isSigner: false, isWritable: true },
+        { pubkey: depositor, isSigner: true, isWritable: true }, 
+        { pubkey: reference, isSigner: false, isWritable: false },
+      ],
+      data: data, 
+    });
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     // const provider = useAnchorProvider();
-    const dummyWallet = {
-      publicKey: depositor,
-      signTransaction: async (tx: Transaction | web3.VersionedTransaction) => tx,
-      signAllTransactions: async (txs: (Transaction | web3.VersionedTransaction)[]) => txs,
-      // Add the missing required method
-      signMessage: async (message: Uint8Array) => Uint8Array.from([])
-    };
-    const provider = new AnchorProvider(
-      connection,
-      dummyWallet as any,
-      AnchorProvider.defaultOptions()
-    );
-    const program = getDexProgram(provider);
+    // const dummyWallet = {
+    //   publicKey: depositor,
+    //   signTransaction: async (tx: Transaction | web3.VersionedTransaction) => tx,
+    //   signAllTransactions: async (txs: (Transaction | web3.VersionedTransaction)[]) => txs,
+    //   // Add the missing required method
+    //   signMessage: async (message: Uint8Array) => Uint8Array.from([])
+    // };
+    // const provider = new AnchorProvider(
+    //   connection,
+    //   dummyWallet as any,
+    //   AnchorProvider.defaultOptions()
+    // );
+    // const program = getDexProgram(provider);
 
-    const depositIx = await program.methods.depositLiquidity(depositAmountABN, depositAmountBBN, minLiquidityBN, feesBN, true).accounts({
-      // @ts-ignore
-      amm: amm,
-      pool: pool,
-      depositor: depositor,
-      mintLiquidity: mintLiquidity,
-      mintA: mintA,
-      mintB: mintB,
-      poolAccountA: poolAccountA,
-      poolAccountB: poolAccountB,
-      depositorAccountLiquidity: depositorAccountLiquidity,
-      depositorAccountA: depositorAccountA,
-      depositorAccountB: depositorAccountB,
-      tokenProgram: tokenProgram,
-      associatedTokenProgram: associatedTokenProgram,
-      systemProgram: systemProgram
-    }).instruction();
+    // const depositIx = await program.methods.depositLiquidity(depositAmountABN, depositAmountBBN, minLiquidityBN, feesBN, true).accounts({
+    //   // @ts-ignore
+    //   amm: amm,
+    //   pool: pool,
+    //   depositor: depositor,
+    //   mintLiquidity: mintLiquidity,
+    //   mintA: mintA,
+    //   mintB: mintB,
+    //   poolAccountA: poolAccountA,
+    //   poolAccountB: poolAccountB,
+    //   depositorAccountLiquidity: depositorAccountLiquidity,
+    //   depositorAccountA: depositorAccountA,
+    //   depositorAccountB: depositorAccountB,
+    //   tokenProgram: tokenProgram,
+    //   associatedTokenProgram: associatedTokenProgram,
+    //   systemProgram: systemProgram
+    // }).instruction();
 
-    depositIx.keys.push({
-      pubkey: reference,
-      isSigner: false,
-      isWritable: false,
-    });
+    // depositIx.keys.push({
+    //   pubkey: reference,
+    //   isSigner: false,
+    //   isWritable: false,
+    // });
 
 
     
-    const transaction = new Transaction().add(depositIx);
+    const transaction = new Transaction().add(incrementIx);
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = depositor;
