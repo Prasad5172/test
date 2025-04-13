@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
       programId: new PublicKey("DX4TnoHCQoCCLC5pg7K49CMb9maMA3TMfHXiPBD55G1w"),
       keys: [
         { pubkey: amm, isSigner: false, isWritable: false },
-        { pubkey: pool, isSigner: false, isWritable: true },
+        { pubkey: pool, isSigner: false, isWritable: false },
         { pubkey: depositor, isSigner: true, isWritable: true },
         { pubkey: mintLiquidity, isSigner: false, isWritable: true },
         { pubkey: mintA, isSigner: false, isWritable: false },
