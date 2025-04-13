@@ -1,8 +1,11 @@
 import { clusterApiUrl, PublicKey,Connection, TransactionMessage, VersionedTransaction, SystemProgram, Transaction, Keypair, TransactionInstruction } from "@solana/web3.js";
 import { NextRequest, NextResponse } from "next/server";
 import { sha256 } from "js-sha256";
-import BN from "bn.js";
+import { AnchorProvider, Program, BN, utils, web3 } from '@project-serum/anchor';
 import { getAssociatedTokenAddress } from "@solana/spl-token";
+import {getDexProgram} from "../../../../anchor/src";
+import { useAnchorProvider } from "../../../components/solana/solana-provider";
+
 // type GetData = {
 //   label: string;
 //   icon: string;
@@ -116,27 +119,28 @@ export async function POST(request: NextRequest) {
       false // useEntireAmount (hardcoded to false)
     );
 
-    const depositIX = new TransactionInstruction({
-      programId: new PublicKey("DX4TnoHCQoCCLC5pg7K49CMb9maMA3TMfHXiPBD55G1w"),
-      keys: [
-        { pubkey: amm, isSigner: false, isWritable: false },
-        { pubkey: pool, isSigner: false, isWritable: false },
-        { pubkey: depositor, isSigner: true, isWritable: true },
-        { pubkey: mintLiquidity, isSigner: false, isWritable: true },
-        { pubkey: mintA, isSigner: false, isWritable: false },
-        { pubkey: mintB, isSigner: false, isWritable: false },
-        { pubkey: poolAccountA, isSigner: false, isWritable: true },
-        { pubkey: poolAccountB, isSigner: false, isWritable: true },
-        { pubkey: depositorAccountLiquidity, isSigner: false, isWritable: true },
-        { pubkey: depositorAccountA, isSigner: false, isWritable: true },
-        { pubkey: depositorAccountB, isSigner: false, isWritable: true },
-        { pubkey: tokenProgram, isSigner: false, isWritable: false },
-        { pubkey: associatedTokenProgram, isSigner: false, isWritable: false },
-        { pubkey: systemProgram, isSigner: false, isWritable: false },
-        { pubkey: reference, isSigner: false, isWritable: false }
-      ],
-      data: instructionData,
-    });
+    // const depositIX = new TransactionInstruction({
+    //   programId: new PublicKey("DX4TnoHCQoCCLC5pg7K49CMb9maMA3TMfHXiPBD55G1w"),
+    //   keys: [
+    //     { pubkey: amm, isSigner: false, isWritable: false },
+    //     { pubkey: pool, isSigner: false, isWritable: false },
+    //     { pubkey: depositor, isSigner: true, isWritable: true },
+    //     { pubkey: mintLiquidity, isSigner: false, isWritable: true },
+    //     { pubkey: mintA, isSigner: false, isWritable: false },
+    //     { pubkey: mintB, isSigner: false, isWritable: false },
+    //     { pubkey: poolAccountA, isSigner: false, isWritable: true },
+    //     { pubkey: poolAccountB, isSigner: false, isWritable: true },
+    //     { pubkey: depositorAccountLiquidity, isSigner: false, isWritable: true },
+    //     { pubkey: depositorAccountA, isSigner: false, isWritable: true },
+    //     { pubkey: depositorAccountB, isSigner: false, isWritable: true },
+    //     { pubkey: tokenProgram, isSigner: false, isWritable: false },
+    //     { pubkey: associatedTokenProgram, isSigner: false, isWritable: false },
+    //     { pubkey: systemProgram, isSigner: false, isWritable: false },
+    //     { pubkey: reference, isSigner: false, isWritable: false }
+    //   ],
+    //   data: instructionData,
+    // });
+
     // const incrementIx = new TransactionInstruction({
     //   programId: PROGRAM_ID, // Your program's ID
     //   keys: [
@@ -147,8 +151,37 @@ export async function POST(request: NextRequest) {
     //   data: data, 
     // });
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const provider = useAnchorProvider();
+    const program = getDexProgram(provider);
+
+    const depositIx = await program.methods.depositLiquidity(depositAmountABN, depositAmountBBN, minLiquidityBN, feesBN, true).accounts({
+      // @ts-ignore
+      amm: amm,
+      pool: pool,
+      depositor: depositor,
+      mintLiquidity: mintLiquidity,
+      mintA: mintA,
+      mintB: mintB,
+      poolAccountA: poolAccountA,
+      poolAccountB: poolAccountB,
+      depositorAccountLiquidity: depositorAccountLiquidity,
+      depositorAccountA: depositorAccountA,
+      depositorAccountB: depositorAccountB,
+      tokenProgram: tokenProgram,
+      associatedTokenProgram: associatedTokenProgram,
+      systemProgram: systemProgram
+    }).instruction();
+
+    depositIx.keys.push({
+      pubkey: reference,
+      isSigner: false,
+      isWritable: false,
+    });
+
+
     const connection = new Connection(ENDPOINT);
-    const transaction = new Transaction().add(depositIX);
+    const transaction = new Transaction().add(depositIx);
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = depositor;
