@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
         { pubkey: tokenProgram, isSigner: false, isWritable: false },
         { pubkey: associatedTokenProgram, isSigner: false, isWritable: false },
         { pubkey: systemProgram, isSigner: false, isWritable: false },
-        { pubkey: reference, isSigner: false, isWritable: false }
+        // { pubkey: reference, isSigner: false, isWritable: false }
       ],
       data: instructionData,
     });
