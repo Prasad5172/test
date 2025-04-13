@@ -133,31 +133,33 @@ export async function POST(request: NextRequest) {
         { pubkey: tokenProgram, isSigner: false, isWritable: false },
         { pubkey: associatedTokenProgram, isSigner: false, isWritable: false },
         { pubkey: systemProgram, isSigner: false, isWritable: false },
-        // { pubkey: reference, isSigner: false, isWritable: true }
+        { pubkey: reference, isSigner: false, isWritable: false }
       ],
       data: instructionData,
     });
-    const incrementIx = new TransactionInstruction({
-      programId: PROGRAM_ID, // Your program's ID
-      keys: [
-        { pubkey: new PublicKey("4TeGWrrqMHW43r2QVYctp993pD6tAb4ZW4dxHJDNqmBR"), isSigner: false, isWritable: true },
-        { pubkey: depositor, isSigner: true, isWritable: true }, 
-        { pubkey: reference, isSigner: false, isWritable: false },
-      ],
-      data: data, 
-    });
+    // const incrementIx = new TransactionInstruction({
+    //   programId: PROGRAM_ID, // Your program's ID
+    //   keys: [
+    //     { pubkey: new PublicKey("4TeGWrrqMHW43r2QVYctp993pD6tAb4ZW4dxHJDNqmBR"), isSigner: false, isWritable: true },
+    //     { pubkey: depositor, isSigner: true, isWritable: true }, 
+    //     { pubkey: reference, isSigner: false, isWritable: false },
+    //   ],
+    //   data: data, 
+    // });
 
     const connection = new Connection(ENDPOINT);
     const transaction = new Transaction().add(depositIX);
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = depositor;
+    console.log("transction",transaction);
 
     const serializedTransaction = transaction.serialize({
       verifySignatures: false,
       requireAllSignatures: false,
     });
     const base64Transaction = serializedTransaction.toString("base64");
+    console.log("base64Transaction",base64Transaction);
 
     return NextResponse.json(
       {
