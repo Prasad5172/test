@@ -6,7 +6,7 @@ import { useDexProgram } from "./data-mutaion";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { ellipsify } from "../ui/ui-layout";
 import { Modal, message, Image } from "antd";
-import { PublicKey, Keypair } from "@solana/web3.js";
+import { PublicKey, Keypair, ConfirmedSignatureInfo } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { DownOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import {
@@ -95,22 +95,6 @@ export function AddLiquidity() {
       console.log(apiUrl);
 
       const url = encodeURL(urlFields);
-      const recipient = new PublicKey(
-        "414C5ffjEmZaVdrptaA5TfWWNsLWFVM6aqZfPvwsxsmr"
-      );
-      const amount = new BigNumber(20);
-      const label = "hello";
-      const message = "testing the code";
-      const memo = "JC#4098";
-
-      // const url = encodeURL({
-      //   recipient,
-      //   amount,
-      //   reference,
-      //   label,
-      //   message,
-      //   memo,
-      // });
       const qr = createQR(url, 360, "white", "black");
       console.log(url);
 
@@ -120,39 +104,56 @@ export function AddLiquidity() {
         console.log("appended");
       }
       setPaymentStatus("Pending...");
+      console.log('\n5. Find the transaction');
+
+    const signatureInfo = await new Promise<ConfirmedSignatureInfo>((resolve, reject) => {
+      const interval = setInterval(async () => {
+        console.count('Checking for transaction...');
+        try {
+          const result = await findReference(connection, reference, { finality: 'confirmed' });
+          console.log(result);
+          console.log('\n 🖌  Signature found: ', result.signature);
+          clearInterval(interval);
+          resolve(result);
+        } catch (error: any) {
+          if (!(error instanceof FindReferenceError)) {
+            // console.error(error);
+            clearInterval(interval);
+            reject(error);
+          }
+        }
+      }, 2000);
+      //  Add a timeout of 5 minutes
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+        console.log('❌ Payment timeout reached.');
+        setPaymentStatus("Timeout Reached");
+        reject(new Error('Payment timeout reached'));
+      }, 2 * 60 * 1000); // 5 minutes in milliseconds
+    });
+    let { signature } = signatureInfo;
+    setPaymentStatus("Confirmed");
+    const transaction = await connection.getTransaction(signature, {
+      commitment: 'confirmed',
+      maxSupportedTransactionVersion: 0,
+    });
+    console.log(transaction);
+    if (!transaction || !transaction.meta) {
+      console.error('Transaction not found or incomplete');
+      return false;
+    }
+    if (transaction.meta.err) {
+      console.error('Transaction failed with error:', transaction.meta.err);
+      return false;
+    }
     } catch (error: any) {
       console.error("Error starting payment transfer:", error);
       message.error(error.message);
       setShowQR(false);
     }
+
+    
   };
-
-  // const checkTransaction = async (
-  //   reference: PublicKey,
-  //   setReference: (newReference: PublicKey) => void
-  // ) => {
-  //   try {
-  //     await findReference(connection, reference, { finality: "confirmed" });
-  //     setReference(Keypair.generate().publicKey);
-  //     setPaymentStatus("Confirmed");
-  //     window.alert("Deposit liquidity transaction confirmed!");
-  //     setShowQR(false);
-  //   } catch (e) {
-  //     if (e instanceof FindReferenceError) {
-  //       console.log(reference.toString(), "not confirmed yet");
-  //       return;
-  //     }
-  //     console.error("Unknown error checking transaction:", e);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     checkTransaction(reference, setReference);
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, [reference]);
-
   // ----------- End Solana Pay code -----------
 
   const addLiquidity = async () => {
