@@ -1,7 +1,8 @@
 import { clusterApiUrl, PublicKey,Connection, TransactionMessage, VersionedTransaction, SystemProgram, Transaction, Keypair, TransactionInstruction } from "@solana/web3.js";
 import { NextRequest, NextResponse } from "next/server";
 import { sha256 } from "js-sha256";
-import { AnchorProvider, Program, BN, utils, web3 } from '@project-serum/anchor';
+// import { AnchorProvider, Program, BN, utils, web3 } from '@project-serum/anchor';
+import { AnchorProvider,BN, web3 } from '@coral-xyz/anchor';
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import {getDexProgram} from "../../../../anchor/src";
 import { useAnchorProvider } from "../../../components/solana/solana-provider";
@@ -56,7 +57,6 @@ export async function POST(request: NextRequest) {
     const minLiquidity = searchParams.get("minLiquidity");
     const fees = searchParams.get("fees");
     const referenceParam = searchParams.get("reference");
-
     if (
       !account ||
       !mintAPubkey ||
@@ -118,8 +118,9 @@ export async function POST(request: NextRequest) {
       feesBN,
       false // useEntireAmount (hardcoded to false)
     );
+    const connection = new Connection(ENDPOINT);
 
-    // const depositIX = new TransactionInstruction({
+    // const depositIx = new TransactionInstruction({
     //   programId: new PublicKey("DX4TnoHCQoCCLC5pg7K49CMb9maMA3TMfHXiPBD55G1w"),
     //   keys: [
     //     { pubkey: amm, isSigner: false, isWritable: false },
@@ -140,6 +141,8 @@ export async function POST(request: NextRequest) {
     //   ],
     //   data: instructionData,
     // });
+    console.log(account);
+
 
     // const incrementIx = new TransactionInstruction({
     //   programId: PROGRAM_ID, // Your program's ID
@@ -152,7 +155,19 @@ export async function POST(request: NextRequest) {
     // });
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const provider = useAnchorProvider();
+    // const provider = useAnchorProvider();
+    const dummyWallet = {
+      publicKey: depositor,
+      signTransaction: async (tx: Transaction | web3.VersionedTransaction) => tx,
+      signAllTransactions: async (txs: (Transaction | web3.VersionedTransaction)[]) => txs,
+      // Add the missing required method
+      signMessage: async (message: Uint8Array) => Uint8Array.from([])
+    };
+    const provider = new AnchorProvider(
+      connection,
+      dummyWallet as any,
+      AnchorProvider.defaultOptions()
+    );
     const program = getDexProgram(provider);
 
     const depositIx = await program.methods.depositLiquidity(depositAmountABN, depositAmountBBN, minLiquidityBN, feesBN, true).accounts({
@@ -180,7 +195,7 @@ export async function POST(request: NextRequest) {
     });
 
 
-    const connection = new Connection(ENDPOINT);
+    
     const transaction = new Transaction().add(depositIx);
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
